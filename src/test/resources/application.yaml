@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: customer-service
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      minimum-idle: 0
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+  liquibase:
+    default-schema: public
+    enabled: true
+    show-summary: off
+  threads:
+    virtual:
+      enabled: true
+
+springdoc:
+  swagger-ui:
+    use-root-path: true
+server:
+  error:
+    include-message: always

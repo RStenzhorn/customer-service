@@ -1,0 +1,286 @@
+openapi: 3.1.0
+info:
+  title: Customer Service API
+  description: Provides customer data and operations.
+  version: v1
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+paths:
+  /customers:
+    get:
+      tags:
+      - customer-controller
+      summary: Gibt alle Kunden zurück
+      description: Liefert eine Liste aller im System gespeicherten Kunden
+      operationId: getCustomers
+      responses:
+        "200":
+          description: Liste wurde erfolgreich abgerufen
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CustomerDto"
+              examples:
+                Beispiel-Kundenliste:
+                  description: Beispiel-Kundenliste
+                  value:
+                  - id: 1
+                    firstName: string
+                    lastName: string
+                    birthDate: 2025-04-05
+                    email: string
+        "404":
+          description: Keine Kunden gefunden
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CustomerDto"
+        "500":
+          description: Interner Serverfehler
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CustomerDto"
+    put:
+      tags:
+      - customer-controller
+      summary: Aktualisiert einen bestehenden Kunden
+      description: Aktualisiert die Daten eines bestehenden Kunden im System
+      operationId: updateCustomer
+      requestBody:
+        description: Die aktualisierten Daten des Kunden
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CustomerDto"
+            examples:
+              kunden_aktualisiert:
+                description: kunden_aktualisiert
+                value:
+                  id: 1
+                  firstName: string
+                  lastName: string
+                  birthDate: 2025-04-05
+                  email: string
+        required: true
+      responses:
+        "200":
+          description: Kunde erfolgreich aktualisiert
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerDto"
+              examples:
+                kunden_aktualisiert:
+                  description: kunden_aktualisiert
+                  value:
+                    id: 1
+                    firstName: string
+                    lastName: string
+                    birthDate: 2025-04-05
+                    email: string
+    post:
+      tags:
+      - customer-controller
+      summary: Erstellt einen neuen Kunden
+      description: Erstellt einen neuen Kunden im System
+      operationId: createCustomer
+      requestBody:
+        description: Die Daten des zu erstellenden Kunden
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCustomerDto"
+            examples:
+              kunden_erstellt:
+                description: kunden_erstellt
+                value:
+                  firstName: string
+                  lastName: string
+                  birthDate: 2025-04-05
+                  email: string
+              kunden_erstellt_invalid:
+                description: kunden_erstellt_invalid
+                value:
+                  firstName: string
+                  lastName: ""
+                  birthDate: 2025-04-05
+                  email: null
+        required: true
+      responses:
+        "201":
+          description: Kunde erfolgreich erstellt
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerDto"
+              examples:
+                kunden_erstellt:
+                  description: kunden_erstellt
+                  value:
+                    id: 1
+                    firstName: string
+                    lastName: string
+                    birthDate: 2025-04-05
+                    email: string
+        "400":
+          description: Ungültige Eingabedaten
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+              examples:
+                kunden_erstellt_invalid:
+                  description: kunden_erstellt_invalid
+  /customers/{id}:
+    get:
+      tags:
+      - customer-controller
+      summary: Ruft einen Kunden ab
+      operationId: getCustomerById
+      parameters:
+      - name: id
+        in: path
+        description: Die ID des Kunden
+        required: true
+        schema:
+          type: integer
+          format: int64
+        examples:
+          kunden_gefunden:
+            description: kunden_gefunden
+            value: 1
+          kunden_nicht_gefunden:
+            description: kunden_nicht_gefunden
+            value: 9999999999
+      responses:
+        "200":
+          description: Kunde gefunden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomerDto"
+              examples:
+                kunden_gefunden:
+                  description: kunden_gefunden
+                  value:
+                    id: 1
+                    firstName: string
+                    lastName: string
+                    birthDate: 2025-04-05
+                    email: string
+        "404":
+          description: Kunde nicht gefunden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+              examples:
+                kunden_nicht_gefunden:
+                  description: kunden_nicht_gefunden
+    delete:
+      tags:
+      - customer-controller
+      summary: Löscht einen bestehenden Kunden
+      description: Löscht einen bestehenden Kunden aus dem System
+      operationId: deleteCustomer
+      parameters:
+      - name: id
+        in: path
+        description: Die ID des zu löschenden Kunden
+        required: true
+        schema:
+          type: integer
+          format: int64
+        examples:
+          kunden_nicht_geloescht:
+            description: kunden_nicht_geloescht
+            value: 9999999999
+          kunden_geloescht:
+            description: kunden_geloescht
+            value: 1
+      responses:
+        "200":
+          description: Kunde erfolgreich gelöscht
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteResult"
+              examples:
+                kunden_geloescht:
+                  description: kunden_geloescht
+        "404":
+          description: Kunde nicht gefunden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+              examples:
+                kunden_nicht_geloescht:
+                  description: kunden_nicht_geloescht
+components:
+  schemas:
+    CustomerDto:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        firstName:
+          type: string
+        lastName:
+          type: string
+        birthDate:
+          type: string
+          format: date
+        email:
+          type: string
+    CreateCustomerDto:
+      type: object
+      properties:
+        firstName:
+          type: string
+          minLength: 1
+        lastName:
+          type: string
+          minLength: 1
+        birthDate:
+          type: string
+          format: date
+        email:
+          type: string
+      required:
+      - birthDate
+    ProblemDetail:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        properties:
+          type: object
+          additionalProperties:
+            type: object
+    DeleteResult:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
