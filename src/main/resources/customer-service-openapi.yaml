@@ -69,6 +69,22 @@ paths:
                   lastName: string
                   birthDate: 2025-04-05
                   email: string
+              kunden_aktualisiert_notFound:
+                description: kunden_aktualisiert_notFound
+                value:
+                  id: 999999999
+                  firstName: string
+                  lastName: string
+                  birthDate: 2025-04-05
+                  email: string
+              kunden_aktualisiert_invalid:
+                description: kunden_aktualisiert_invalid
+                value:
+                  id: 1
+                  firstName: ""
+                  lastName: string
+                  birthDate: 2025-04-05
+                  email: string
         required: true
       responses:
         "200":
@@ -86,6 +102,24 @@ paths:
                     lastName: string
                     birthDate: 2025-04-05
                     email: string
+        "400":
+          description: Ungültige Eingabedaten
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+              examples:
+                kunden_aktualisiert_invalid:
+                  description: kunden_aktualisiert_invalid
+        "404":
+          description: Kunde nicht gefunden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
+              examples:
+                kunden_aktualisiert_notFound:
+                  description: kunden_aktualisiert_notFound
     post:
       tags:
       - customer-controller
@@ -235,18 +269,6 @@ components:
           format: int64
         firstName:
           type: string
-        lastName:
-          type: string
-        birthDate:
-          type: string
-          format: date
-        email:
-          type: string
-    CreateCustomerDto:
-      type: object
-      properties:
-        firstName:
-          type: string
           minLength: 1
         lastName:
           type: string
@@ -258,6 +280,7 @@ components:
           type: string
       required:
       - birthDate
+      - id
     ProblemDetail:
       type: object
       properties:
@@ -278,6 +301,22 @@ components:
           type: object
           additionalProperties:
             type: object
+    CreateCustomerDto:
+      type: object
+      properties:
+        firstName:
+          type: string
+          minLength: 1
+        lastName:
+          type: string
+          minLength: 1
+        birthDate:
+          type: string
+          format: date
+        email:
+          type: string
+      required:
+      - birthDate
     DeleteResult:
       type: object
       properties:

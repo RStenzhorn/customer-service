@@ -178,18 +178,44 @@ public class CustomerController {
     @io.swagger.v3.oas.annotations.parameters.RequestBody(
             description = "Die aktualisierten Daten des Kunden",
             required = true,
-            content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = CustomerDto.class), examples = @ExampleObject(
-                    name = "kunden_aktualisiert",
-                    value = """
-                            {
-                              "id": 1,
-                              "firstName": "string",
-                              "lastName": "string",
-                              "birthDate": "2025-04-05",
-                              "email": "string"
-                            }
-                            """
-            ))
+            content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = CustomerDto.class), examples = {
+                    @ExampleObject(
+                            name = "kunden_aktualisiert",
+                            value = """
+                                    {
+                                      "id": 1,
+                                      "firstName": "string",
+                                      "lastName": "string",
+                                      "birthDate": "2025-04-05",
+                                      "email": "string"
+                                    }
+                                    """
+                    ),
+                    @ExampleObject(
+                            name = "kunden_aktualisiert_notFound",
+                            value = """
+                                    {
+                                      "id": 999999999,
+                                      "firstName": "string",
+                                      "lastName": "string",
+                                      "birthDate": "2025-04-05",
+                                      "email": "string"
+                                    }
+                                    """
+                    ),
+                    @ExampleObject(
+                            name = "kunden_aktualisiert_invalid",
+                            value = """
+                                    {
+                                      "id": 1,
+                                      "firstName": "",
+                                      "lastName": "string",
+                                      "birthDate": "2025-04-05",
+                                      "email": "string"
+                                    }
+                                    """
+                    )
+            })
     )
     @ApiResponse(
             responseCode = "200",
@@ -205,6 +231,22 @@ public class CustomerController {
                               "email": "string"
                             }
                             """
+            ))
+    )
+    @ApiResponse(
+            responseCode = "400",
+            description = "Ungültige Eingabedaten",
+            content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class),  examples =
+            @ExampleObject(
+                    name = "kunden_aktualisiert_invalid"
+            ))
+    )
+    @ApiResponse(
+            responseCode = "404",
+            description = "Kunde nicht gefunden",
+            content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class), examples =
+            @ExampleObject(
+                    name = "kunden_aktualisiert_notFound"
             ))
     )
     @PutMapping
