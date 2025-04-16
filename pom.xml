@@ -97,11 +97,6 @@
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.openapitools</groupId>
-            <artifactId>jackson-databind-nullable</artifactId>
-            <version>0.2.6</version>
-        </dependency>
     </dependencies>
 
     <build>
@@ -139,32 +134,6 @@
                     <outputDir>${project.basedir}/src/main/resources</outputDir>
                     <apiDocsUrl>http://localhost:8080/v3/api-docs.yaml</apiDocsUrl>
                 </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.openapitools</groupId>
-                <artifactId>openapi-generator-maven-plugin</artifactId>
-                <version>6.6.0</version>
-                <executions>
-                    <execution>
-                        <id>generate-rest-assured-tests</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <inputSpec>${project.basedir}/src/main/resources/customer-service-openapi.yaml</inputSpec>
-                            <generatorName>java</generatorName>
-                            <library>rest-assured</library>
-                            <output>${project.build.directory}/generated-test-sources/rest-assured</output>
-                            <skipValidateSpec>true</skipValidateSpec>
-                            <generateApiTests>false</generateApiTests>
-                            <configOptions>
-                                <serializationLibrary>jackson</serializationLibrary>
-                                <useJakartaEe>true</useJakartaEe>
-                            </configOptions>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
