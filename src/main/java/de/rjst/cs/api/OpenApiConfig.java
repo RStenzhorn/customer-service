@@ -1,4 +1,4 @@
-package de.rjst.cs;
+package de.rjst.cs.api;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;

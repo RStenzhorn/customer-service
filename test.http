@@ -1,0 +1,12 @@
+PUT http://localhost:8585/rest/Customer+Service+API/v1/customers
+Content-Type: application/json
+
+{
+  "id": 1,
+  "firstName": "string",
+  "lastName": "string",
+  "birthDate": "2025-04-05",
+  "email": "string"
+}
+
+###

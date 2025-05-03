@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.1.0
 info:
   title: Customer Service API
   description: Provides customer data and operations.
@@ -11,12 +11,12 @@ paths:
     get:
       tags:
       - customer-controller
-      summary: Gibt alle Kunden zurück
-      description: Liefert eine Liste aller im System gespeicherten Kunden
+      summary: Returns all customers
+      description: Provides a list of all customers stored in the system
       operationId: getCustomers
       responses:
         "200":
-          description: Liste wurde erfolgreich abgerufen
+          description: List was successfully retrieved
           content:
             application/json:
               schema:
@@ -24,24 +24,16 @@ paths:
                 items:
                   $ref: "#/components/schemas/CustomerDto"
               examples:
-                Beispiel-Kundenliste:
-                  description: Beispiel-Kundenliste
+                Example customer list:
+                  description: Example customer list
                   value:
                   - id: 1
                     firstName: string
                     lastName: string
                     birthDate: 2025-04-05
                     email: string
-        "404":
-          description: Keine Kunden gefunden
-          content:
-            '*/*':
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/CustomerDto"
         "500":
-          description: Interner Serverfehler
+          description: Internal server error
           content:
             '*/*':
               schema:
@@ -51,34 +43,34 @@ paths:
     put:
       tags:
       - customer-controller
-      summary: Aktualisiert einen bestehenden Kunden
-      description: Aktualisiert die Daten eines bestehenden Kunden im System
+      summary: Updates an existing customer
+      description: Updates the data of an existing customer in the system
       operationId: updateCustomer
       requestBody:
-        description: Die aktualisierten Daten des Kunden
+        description: The updated data of the customer
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/CustomerDto"
             examples:
-              kunden_aktualisiert:
-                description: kunden_aktualisiert
+              customer_updated:
+                description: customer_updated
                 value:
                   id: 1
                   firstName: string
                   lastName: string
                   birthDate: 2025-04-05
                   email: string
-              kunden_aktualisiert_notFound:
-                description: kunden_aktualisiert_notFound
+              customer_updated_notFound:
+                description: customer_updated_notFound
                 value:
                   id: 999999999
                   firstName: string
                   lastName: string
                   birthDate: 2025-04-05
                   email: string
-              kunden_aktualisiert_invalid:
-                description: kunden_aktualisiert_invalid
+              customer_updated_invalid:
+                description: customer_updated_invalid
                 value:
                   id: 1
                   firstName: ""
@@ -88,60 +80,76 @@ paths:
         required: true
       responses:
         "200":
-          description: Kunde erfolgreich aktualisiert
+          description: Customer successfully updated
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/CustomerDto"
               examples:
-                kunden_aktualisiert:
-                  description: kunden_aktualisiert
-                  value:
-                    id: 1
-                    firstName: string
-                    lastName: string
-                    birthDate: 2025-04-05
-                    email: string
+                customer_updated:
+                  description: customer_updated
+                  value: |
+                    {
+                      "id": {{ request.body/id }},
+                      "firstName": "{{ request.body/firstName }}",
+                      "lastName": "{{ request.body/lastName }}",
+                      "birthDate": "{{ request.body/birthDate }}",
+                      "email": "{{ request.body/email }}"
+                    }
         "400":
-          description: Ungültige Eingabedaten
+          description: Invalid input data
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ProblemDetail"
               examples:
-                kunden_aktualisiert_invalid:
-                  description: kunden_aktualisiert_invalid
+                customer_updated_invalid:
+                  description: customer_updated_invalid
         "404":
-          description: Kunde nicht gefunden
+          description: Customer not found
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ProblemDetail"
               examples:
-                kunden_aktualisiert_notFound:
-                  description: kunden_aktualisiert_notFound
+                customer_updated_notFound:
+                  description: customer_updated_notFound
     post:
       tags:
       - customer-controller
-      summary: Erstellt einen neuen Kunden
-      description: Erstellt einen neuen Kunden im System
+      summary: Creates a new customer
+      description: Creates a new customer in the system
       operationId: createCustomer
       requestBody:
-        description: Die Daten des zu erstellenden Kunden
+        description: The data of the customer to be created
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/CreateCustomerDto"
             examples:
-              kunden_erstellt:
-                description: kunden_erstellt
+              customer_created:
+                description: customer_created
+                value:
+                  firstName: Max
+                  lastName: Mustermann
+                  birthDate: 2025-04-05
+                  email: max.mustermann@web.de
+              customer_created_invalid_firstname:
+                description: customer_created_invalid_firstname
+                value:
+                  firstName: ""
+                  lastName: Mustermann
+                  birthDate: 2025-04-05
+                  email: null
+              customer_created_invalid_lastname:
+                description: customer_created_invalid_lastname
                 value:
                   firstName: string
-                  lastName: string
+                  lastName: ""
                   birthDate: 2025-04-05
-                  email: string
-              kunden_erstellt_invalid:
-                description: kunden_erstellt_invalid
+                  email: null
+              customer_created_invalid_birthDate:
+                description: customer_created_invalid_birthDate
                 value:
                   firstName: string
                   lastName: ""
@@ -150,14 +158,14 @@ paths:
         required: true
       responses:
         "201":
-          description: Kunde erfolgreich erstellt
+          description: Customer successfully created
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/CustomerDto"
               examples:
-                kunden_erstellt:
-                  description: kunden_erstellt
+                customer_created:
+                  description: customer_created
                   value:
                     id: 1
                     firstName: string
@@ -165,45 +173,55 @@ paths:
                     birthDate: 2025-04-05
                     email: string
         "400":
-          description: Ungültige Eingabedaten
+          description: Invalid input data
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ProblemDetail"
               examples:
-                kunden_erstellt_invalid:
-                  description: kunden_erstellt_invalid
+                customer_created_invalid_firstname:
+                  description: customer_created_invalid_firstname
+                customer_created_invalid_lastname:
+                  description: customer_created_invalid_lastname
+                customer_created_invalid_birthDate:
+                  description: customer_created_invalid_birthDate
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CustomerDto"
   /customers/{id}:
     get:
       tags:
       - customer-controller
-      summary: Ruft einen Kunden ab
+      summary: Retrieves a customer
       operationId: getCustomerById
       parameters:
       - name: id
         in: path
-        description: Die ID des Kunden
+        description: The ID of the customer
         required: true
         schema:
           type: integer
           format: int64
         examples:
-          kunden_gefunden:
-            description: kunden_gefunden
-            value: 1
-          kunden_nicht_gefunden:
-            description: kunden_nicht_gefunden
+          customer_not_found:
+            description: customer_not_found
             value: 9999999999
+          customer_found:
+            description: customer_found
+            value: 1
       responses:
         "200":
-          description: Kunde gefunden
+          description: Customer found
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/CustomerDto"
               examples:
-                kunden_gefunden:
-                  description: kunden_gefunden
+                customer_found:
+                  description: customer_found
                   value:
                     id: 1
                     firstName: string
@@ -211,54 +229,57 @@ paths:
                     birthDate: 2025-04-05
                     email: string
         "404":
-          description: Kunde nicht gefunden
+          description: Customer not found
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ProblemDetail"
               examples:
-                kunden_nicht_gefunden:
-                  description: kunden_nicht_gefunden
+                customer_not_found:
+                  description: customer_not_found
+        "500":
+          description: Internal Server Error
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/CustomerDto"
     delete:
       tags:
       - customer-controller
-      summary: Löscht einen bestehenden Kunden
-      description: Löscht einen bestehenden Kunden aus dem System
+      summary: Deletes an existing customer
+      description: Deletes an existing customer from the system
       operationId: deleteCustomer
       parameters:
       - name: id
         in: path
-        description: Die ID des zu löschenden Kunden
+        description: The ID of the customer to be deleted
         required: true
         schema:
           type: integer
           format: int64
         examples:
-          kunden_nicht_geloescht:
-            description: kunden_nicht_geloescht
+          non_customer:
+            description: non_customer
             value: 9999999999
-          kunden_geloescht:
-            description: kunden_geloescht
+          customer_deleted:
+            description: customer_deleted
             value: 1
       responses:
-        "200":
-          description: Kunde erfolgreich gelöscht
+        "204":
+          description: Customer successfully deleted
           content:
             application/json:
-              schema:
-                $ref: "#/components/schemas/DeleteResult"
               examples:
-                kunden_geloescht:
-                  description: kunden_geloescht
-        "404":
-          description: Kunde nicht gefunden
+                customer_deleted:
+                  description: customer_deleted
+                non_customer:
+                  description: non_customer
+        "500":
+          description: Internal Server Error
           content:
-            application/json:
+            '*/*':
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
-              examples:
-                kunden_nicht_geloescht:
-                  description: kunden_nicht_geloescht
+                type: object
 components:
   schemas:
     CustomerDto:
@@ -317,9 +338,3 @@ components:
           type: string
       required:
       - birthDate
-    DeleteResult:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
