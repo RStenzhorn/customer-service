@@ -10,3 +10,13 @@ Content-Type: application/json
 }
 
 ###
+
+POST http://localhost:8585/rest/Customer+Service+API/v1/customers
+Content-Type: application/json
+
+{
+  "firstName": "",
+  "lastName": "Mustermann",
+  "birthDate": "2025-04-05",
+  "email": null
+}

@@ -22,6 +22,5 @@ public class AllCustomerSupplier implements Supplier<List<CustomerDto>> {
                 .stream()
                 .map(customerDtoMapper)
                 .toList();
-
     }
 }

@@ -16,7 +16,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/customers")
 public class CustomerController implements CreateCustomer, GetCustomers, GetCustomerById, UpdateCustomer, DeleteCustomer {
 
     private final AllCustomerSupplier allCustomerSupplier;
@@ -25,31 +24,31 @@ public class CustomerController implements CreateCustomer, GetCustomers, GetCust
     private final UpdateCustomerFunction updateCustomerFunction;
     private final DeleteCustomerFunction deleteCustomerFunction;
 
-    @GetMapping
+    @GetMapping(CustomerEndpoints.CUSTOMERS)
     @ResponseStatus(HttpStatus.OK)
     public List<CustomerDto> getCustomers() {
         return allCustomerSupplier.get();
     }
 
-    @GetMapping("{id}")
+    @GetMapping(CustomerEndpoints.CUSTOMER)
     @ResponseStatus(HttpStatus.OK)
     public CustomerDto getCustomerById(@PathVariable final Long id) {
         return customerByIdFunction.apply(id);
     }
 
-    @PostMapping
+    @PostMapping(CustomerEndpoints.CUSTOMERS)
     @ResponseStatus(HttpStatus.CREATED)
     public CustomerDto createCustomer(@Valid @RequestBody final CreateCustomerDto customerDto) {
         return createCustomerFunction.apply(customerDto);
     }
 
-    @PutMapping
+    @PutMapping(CustomerEndpoints.CUSTOMERS)
     @ResponseStatus(HttpStatus.OK)
     public CustomerDto updateCustomer(@Valid @RequestBody final CustomerDto customerDto) {
         return updateCustomerFunction.apply(customerDto);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping(CustomerEndpoints.CUSTOMER)
     public ResponseEntity<?> deleteCustomer(@PathVariable final Long id) {
         deleteCustomerFunction.accept(id);
 

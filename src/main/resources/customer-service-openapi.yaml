@@ -177,14 +177,26 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
+                $ref: "#/components/schemas/ErrorResponse"
               examples:
                 customer_created_invalid_firstname:
                   description: customer_created_invalid_firstname
+                  value:
+                    message: Validierungsfehler
+                    errors:
+                      firstName: Vorname darf nicht leer sein
                 customer_created_invalid_lastname:
                   description: customer_created_invalid_lastname
+                  value:
+                    message: Validierungsfehler
+                    errors:
+                      lastName: Nachname darf nicht leer sein
                 customer_created_invalid_birthDate:
                   description: customer_created_invalid_birthDate
+                  value:
+                    message: Validierungsfehler
+                    errors:
+                      birthDate: Geburtsdatum ist ungültig
         "500":
           description: Internal Server Error
           content:
@@ -338,3 +350,12 @@ components:
           type: string
       required:
       - birthDate
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        errors:
+          type: object
+          additionalProperties:
+            type: string

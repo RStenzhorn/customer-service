@@ -1,9 +1,13 @@
 package de.rjst.cs;
 
 import io.github.microcks.testcontainers.MicrocksContainersEnsemble;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.boot.web.context.ConfigurableWebServerApplicationContext;
+import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
+import org.testcontainers.Testcontainers;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
@@ -31,4 +35,13 @@ public class TestcontainersConfiguration {
         microcksContainer.setPortBindings(List.of("8585:8080"));
         return ensemble;
     }
+
+    @Bean
+    public ApplicationListener<ApplicationStartedEvent> portExposer(final ConfigurableWebServerApplicationContext context) {
+        return event -> {
+            final var webServer = context.getWebServer();
+            Testcontainers.exposeHostPorts(webServer.getPort());
+        };
+    }
+
 }

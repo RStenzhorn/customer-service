@@ -7,8 +7,9 @@ import java.util.Map;
 
 @AllArgsConstructor
 @Data
-public class ErrorDto {
+public class ErrorResponse {
 
+    private String message;
     private Map<String, String> errors;
 
 }

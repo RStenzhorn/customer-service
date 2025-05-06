@@ -2,13 +2,13 @@ package de.rjst.cs.api.openapi;
 
 import de.rjst.cs.api.CreateCustomerDto;
 import de.rjst.cs.api.CustomerDto;
+import de.rjst.cs.api.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import org.springframework.http.ProblemDetail;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -85,10 +85,40 @@ public interface CreateCustomer {
             ))
     )
     @ApiResponse(responseCode = "400", description = "Invalid input data",
-            content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ProblemDetail.class), examples = {
-                    @ExampleObject(name = "customer_created_invalid_firstname"),
-                    @ExampleObject(name = "customer_created_invalid_lastname"),
-                    @ExampleObject(name = "customer_created_invalid_birthDate"),
+            content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class), examples = {
+                    @ExampleObject(
+                            name = "customer_created_invalid_firstname",
+                            value = """
+                                    {
+                                      "message": "Validierungsfehler",
+                                      "errors": {
+                                        "firstName": "Vorname darf nicht leer sein"
+                                      }
+                                    }
+                                    """
+                    ),
+                    @ExampleObject(
+                            name = "customer_created_invalid_lastname",
+                            value = """
+                                    {
+                                      "message": "Validierungsfehler",
+                                      "errors": {
+                                        "lastName": "Nachname darf nicht leer sein"
+                                      }
+                                    }
+                                    """
+                    ),
+                    @ExampleObject(
+                            name = "customer_created_invalid_birthDate",
+                            value = """
+                                    {
+                                      "message": "Validierungsfehler",
+                                      "errors": {
+                                        "birthDate": "Geburtsdatum ist ungültig"
+                                      }
+                                    }
+                                    """
+                    ),
             })
     )
     @ApiResponse(responseCode = "500", description = "Internal Server Error")
