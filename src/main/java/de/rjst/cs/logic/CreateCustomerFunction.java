@@ -1,14 +1,13 @@
 package de.rjst.cs.logic;
 
-import de.rjst.cs.api.CreateCustomerDto;
-import de.rjst.cs.api.CustomerDto;
+import de.rjst.cs.api.openapi.model.CreateCustomerDto;
+import de.rjst.cs.api.openapi.model.CustomerDto;
 import de.rjst.cs.database.CustomerRepository;
 import de.rjst.cs.logic.mapper.CustomerDtoMapper;
 import de.rjst.cs.logic.mapper.CustomerNewEntityMapper;
+import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.function.Function;
 
 @RequiredArgsConstructor
 @Service

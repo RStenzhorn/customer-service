@@ -1,16 +1,14 @@
 package de.rjst.cs.logic;
 
-import de.rjst.cs.api.CustomerDto;
-import de.rjst.cs.database.CustomerEntity;
+import de.rjst.cs.api.openapi.model.CustomerDto;
 import de.rjst.cs.database.CustomerRepository;
 import de.rjst.cs.logic.mapper.CustomerDtoMapper;
 import de.rjst.cs.logic.mapper.CustomerEntityMapper;
+import java.util.function.Function;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.function.Function;
 
 @RequiredArgsConstructor
 @Service

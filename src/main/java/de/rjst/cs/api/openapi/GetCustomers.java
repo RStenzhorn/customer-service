@@ -1,16 +1,15 @@
 package de.rjst.cs.api.openapi;
 
-import de.rjst.cs.api.CustomerDto;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
+import de.rjst.cs.api.openapi.model.CustomerDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-
 import java.util.List;
-
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 public interface GetCustomers {
 

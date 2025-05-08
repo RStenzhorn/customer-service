@@ -20,6 +20,8 @@ spring:
 springdoc:
   swagger-ui:
     use-root-path: true
+  api-docs:
+    version: openapi_3_0
 server:
   error:
     include-message: always

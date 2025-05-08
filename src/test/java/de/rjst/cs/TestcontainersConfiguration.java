@@ -1,6 +1,7 @@
 package de.rjst.cs;
 
 import io.github.microcks.testcontainers.MicrocksContainersEnsemble;
+import java.util.List;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
@@ -11,8 +12,6 @@ import org.testcontainers.Testcontainers;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
-
-import java.util.List;
 
 @TestConfiguration(proxyBeanMethods = false)
 public class TestcontainersConfiguration {
@@ -31,6 +30,8 @@ public class TestcontainersConfiguration {
                 .asCompatibleSubstituteFor("quay.io/microcks/microcks-uber:1.10.0");
         final var ensemble = new MicrocksContainersEnsemble(network, nativeImage)
                 .withMainArtifacts("customer-service-openapi.yaml");
+//        final var ensemble = new MicrocksContainersEnsemble(network, "quay.io/microcks/microcks-uber:1.10.0")
+//            .withMainArtifacts("customer-service-openapi.yaml");
         final var microcksContainer = ensemble.getMicrocksContainer();
         microcksContainer.setPortBindings(List.of("8585:8080"));
         return ensemble;

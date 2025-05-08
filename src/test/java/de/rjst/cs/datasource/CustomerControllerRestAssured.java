@@ -1,16 +1,16 @@
 package de.rjst.cs.datasource;
 
-import de.rjst.cs.api.CreateCustomerDto;
-import de.rjst.cs.api.CustomerDto;
+import static io.restassured.RestAssured.given;
+
 import de.rjst.cs.api.CustomerEndpoints;
+import de.rjst.cs.api.openapi.model.CreateCustomerDto;
+import de.rjst.cs.api.openapi.model.CustomerDto;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import static io.restassured.RestAssured.given;
 
 @RequiredArgsConstructor
 @Service

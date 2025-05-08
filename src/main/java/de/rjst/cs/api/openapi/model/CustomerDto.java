@@ -1,13 +1,15 @@
-package de.rjst.cs.api;
+package de.rjst.cs.api.openapi.model;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDate;
 import lombok.Data;
 
-import java.time.LocalDate;
-
 @Data
-public class CreateCustomerDto {
+public class CustomerDto {
+
+    @NotNull
+    private Long id;
 
     @NotBlank
     private String firstName;
@@ -19,5 +21,4 @@ public class CreateCustomerDto {
     private LocalDate birthDate;
 
     private String email;
-
 }

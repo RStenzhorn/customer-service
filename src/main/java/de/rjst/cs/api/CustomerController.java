@@ -1,17 +1,33 @@
 package de.rjst.cs.api;
 
-import de.rjst.cs.api.openapi.*;
-import de.rjst.cs.logic.*;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
+import de.rjst.cs.api.openapi.CreateCustomer;
+import de.rjst.cs.api.openapi.DeleteCustomer;
+import de.rjst.cs.api.openapi.GetCustomerById;
+import de.rjst.cs.api.openapi.GetCustomers;
+import de.rjst.cs.api.openapi.UpdateCustomer;
+import de.rjst.cs.api.openapi.model.CreateCustomerDto;
+import de.rjst.cs.api.openapi.model.CustomerDto;
+import de.rjst.cs.logic.AllCustomerSupplier;
+import de.rjst.cs.logic.CreateCustomerFunction;
+import de.rjst.cs.logic.CustomerByIdFunction;
+import de.rjst.cs.logic.DeleteCustomerFunction;
+import de.rjst.cs.logic.UpdateCustomerFunction;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @RequiredArgsConstructor

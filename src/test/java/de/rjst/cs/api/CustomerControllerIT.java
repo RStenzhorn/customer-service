@@ -1,17 +1,17 @@
 package de.rjst.cs.api;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 import de.rjst.cs.TestcontainersConfiguration;
+import de.rjst.cs.api.openapi.model.CreateCustomerDto;
 import de.rjst.cs.datasource.CustomerControllerRestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-
-import java.time.LocalDate;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(TestcontainersConfiguration.class)
