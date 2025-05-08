@@ -180,19 +180,19 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
               examples:
                 customer_created_invalid_firstname:
-                  description: customer_created_invalid_firstname
+                  description: Customer firstname is invalid
                   value:
                     message: Validierungsfehler
                     errors:
                       firstName: Vorname darf nicht leer sein
                 customer_created_invalid_lastname:
-                  description: customer_created_invalid_lastname
+                  description: Customer lastname is invalid
                   value:
                     message: Validierungsfehler
                     errors:
                       lastName: Nachname darf nicht leer sein
                 customer_created_invalid_birthDate:
-                  description: customer_created_invalid_birthDate
+                  description: Customer birthDate is invalid
                   value:
                     message: Validierungsfehler
                     errors:
@@ -294,26 +294,47 @@ paths:
                 type: object
 components:
   schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error message
+        errors:
+          type: object
+          additionalProperties:
+            type: string
+          description: Validation errors
+      required:
+        - errors
+        - message
     CustomerDto:
       type: object
       properties:
         id:
           type: integer
           format: int64
+          description: The ID of the customer
         firstName:
           type: string
+          description: The first name of the customer
           minLength: 1
         lastName:
           type: string
+          description: The last name of the customer
           minLength: 1
         birthDate:
           type: string
           format: date
+          description: The birth date of the customer
         email:
           type: string
+          description: The email of the customer
       required:
       - birthDate
+      - firstName
       - id
+      - lastName
     ProblemDetail:
       type: object
       properties:
@@ -350,12 +371,3 @@ components:
           type: string
       required:
       - birthDate
-    ErrorResponse:
-      type: object
-      properties:
-        message:
-          type: string
-        errors:
-          type: object
-          additionalProperties:
-            type: string
