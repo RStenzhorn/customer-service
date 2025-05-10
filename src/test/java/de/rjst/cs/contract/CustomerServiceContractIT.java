@@ -1,5 +1,8 @@
 package de.rjst.cs.contract;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.rjst.cs.TestcontainersConfiguration;
@@ -11,9 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.context.ConfigurableWebServerApplicationContext;
 import org.springframework.context.annotation.Import;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Import(TestcontainersConfiguration.class)
@@ -27,7 +27,7 @@ public class CustomerServiceContractIT {
 
 
     @Test
-    void testOpenAPIContract() throws Exception {
+    void openApiContract() throws Exception {
         final var webServer = context.getWebServer();
         final var port = webServer.getPort();
         final var testRequest = new TestRequest.Builder()
@@ -40,6 +40,26 @@ public class CustomerServiceContractIT {
         final var testResult = microcksContainer.testEndpoint(testRequest);
 
         final var mapper = new ObjectMapper().setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(testResult));
+
+        assertTrue(testResult.isSuccess());
+        assertEquals(5, testResult.getTestCaseResults().size());
+    }
+
+    @Test
+    void openApiMocks() throws Exception {
+        final var microcksContainer = microcksEnsemble.getMicrocksContainer();
+        var customerService = microcksContainer.getRestMockEndpoint("Customer+Service+API", "v1");
+        final var testRequest = new TestRequest.Builder()
+            .serviceId("Customer Service API:v1")
+            .runnerType(TestRunnerType.OPEN_API_SCHEMA.name())
+            .testEndpoint(customerService.replace("localhost", "host.docker.internal"))
+            .build();
+
+        final var testResult = microcksContainer.testEndpoint(testRequest);
+
+        final var mapper = new ObjectMapper().setSerializationInclusion(
+            JsonInclude.Include.NON_NULL);
         System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(testResult));
 
         assertTrue(testResult.isSuccess());

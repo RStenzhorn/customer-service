@@ -26,12 +26,9 @@ public class TestcontainersConfiguration {
 
     @Bean
     public MicrocksContainersEnsemble microcksEnsemble() {
-        final var nativeImage = DockerImageName.parse("quay.io/microcks/microcks-uber:1.10.0-native")
-                .asCompatibleSubstituteFor("quay.io/microcks/microcks-uber:1.10.0");
-        final var ensemble = new MicrocksContainersEnsemble(network, nativeImage)
-                .withMainArtifacts("customer-service-openapi.yaml");
-//        final var ensemble = new MicrocksContainersEnsemble(network, "quay.io/microcks/microcks-uber:1.10.0")
-//            .withMainArtifacts("customer-service-openapi.yaml");
+        final var ensemble = new MicrocksContainersEnsemble(network,
+                                                            "quay.io/microcks/microcks-uber:1.10.0")
+            .withMainArtifacts("customer-service-openapi.yaml");
         final var microcksContainer = ensemble.getMicrocksContainer();
         microcksContainer.setPortBindings(List.of("8585:8080"));
         return ensemble;

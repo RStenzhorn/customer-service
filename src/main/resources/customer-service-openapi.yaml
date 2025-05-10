@@ -69,13 +69,29 @@ paths:
                   lastName: string
                   birthDate: 2025-04-05
                   email: string
-              customer_updated_invalid:
-                description: customer_updated_invalid
+              customer_updated_invalid_firstName:
+                description: customer_updated_invalid_firstName
                 value:
                   id: 1
                   firstName: ""
                   lastName: string
                   birthDate: 2025-04-05
+                  email: string
+              customer_updated_invalid_lastName:
+                description: customer_updated_invalid_lastName
+                value:
+                  id: 1
+                  firstName: string
+                  lastName: ""
+                  birthDate: 2025-04-05
+                  email: string
+              customer_updated_invalid_birthDate:
+                description: customer_updated_invalid_birthDate
+                value:
+                  id: 1
+                  firstName: string
+                  lastName: string
+                  birthDate: ""
                   email: string
         required: true
       responses:
@@ -101,19 +117,56 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
+                $ref: "#/components/schemas/ErrorResponse"
               examples:
-                customer_updated_invalid:
-                  description: customer_updated_invalid
+                customer_updated_invalid_firstName:
+                  description: Customer firstname is invalid
+                  value:
+                    message: Validierungsfehler
+                    errors:
+                      firstName: Vorname darf nicht leer sein
+                customer_updated_invalid_lastName:
+                  description: Customer lastname is invalid
+                  value:
+                    message: Validierungsfehler
+                    errors:
+                      lastName: Nachname darf nicht leer sein
+                customer_updated_invalid_birthDate:
+                  description: Customer birthDate is invalid
+                  value:
+                    message: Validierungsfehler
+                    errors:
+                      birthDate: Geburtsdatum ist ungültig
         "404":
           description: Customer not found
           content:
             application/json:
-              schema:
-                $ref: "#/components/schemas/ProblemDetail"
               examples:
                 customer_updated_notFound:
-                  description: customer_updated_notFound
+                  description: Customer not found
+      x-microcks-operation:
+        delay: "25"
+        dispatcherRules: |
+          def customer = new groovy.json.JsonSlurper().parseText(mockRequest.requestContent);
+
+          if (customer.id == null || customer.id == 999999999) {
+              return "customer_updated_notFound";
+          }
+
+          if (customer.firstName == null || customer.firstName.trim() == "") {
+            return "customer_updated_invalid_firstName";
+          }
+
+          if (customer.lastName == null || customer.lastName.trim() == "") {
+            return "customer_updated_invalid_lastName";
+          }
+
+          if (customer.birthDate == null || customer.birthDate.trim() == "") {
+              return "customer_updated_invalid_birthDate";
+          }
+
+          return "customer_updated";
+        dispatcher: SCRIPT
     post:
       tags:
       - customer-controller
@@ -134,15 +187,15 @@ paths:
                   lastName: Mustermann
                   birthDate: 2025-04-05
                   email: max.mustermann@web.de
-              customer_created_invalid_firstname:
-                description: customer_created_invalid_firstname
+              customer_created_invalid_firstName:
+                description: customer_created_invalid_firstName
                 value:
                   firstName: ""
                   lastName: Mustermann
                   birthDate: 2025-04-05
                   email: null
-              customer_created_invalid_lastname:
-                description: customer_created_invalid_lastname
+              customer_created_invalid_lastName:
+                description: customer_created_invalid_lastName
                 value:
                   firstName: string
                   lastName: ""
@@ -179,13 +232,13 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
               examples:
-                customer_created_invalid_firstname:
+                customer_created_invalid_firstName:
                   description: Customer firstname is invalid
                   value:
                     message: Validierungsfehler
                     errors:
                       firstName: Vorname darf nicht leer sein
-                customer_created_invalid_lastname:
+                customer_created_invalid_lastName:
                   description: Customer lastname is invalid
                   value:
                     message: Validierungsfehler
@@ -203,6 +256,25 @@ paths:
             '*/*':
               schema:
                 $ref: "#/components/schemas/CustomerDto"
+      x-microcks-operation:
+        delay: "25"
+        dispatcherRules: |
+          def customer = new groovy.json.JsonSlurper().parseText(mockRequest.requestContent);
+
+          if (customer.firstName == null || customer.firstName.trim() == "") {
+            return "customer_created_invalid_firstname";
+          }
+
+          if (customer.lastName == null || customer.lastName.trim() == "") {
+            return "customer_created_invalid_lastname";
+          }
+
+          if (customer.birthDate == null || customer.birthDate.trim() == "")) {
+              return "customer_created_invalid_birthDate";
+          }
+
+          return "customer_created";
+        dispatcher: SCRIPT
   /customers/{id}:
     get:
       tags:
@@ -244,8 +316,6 @@ paths:
           description: Customer not found
           content:
             application/json:
-              schema:
-                $ref: "#/components/schemas/ProblemDetail"
               examples:
                 customer_not_found:
                   description: customer_not_found
@@ -335,26 +405,6 @@ components:
       - firstName
       - id
       - lastName
-    ProblemDetail:
-      type: object
-      properties:
-        type:
-          type: string
-          format: uri
-        title:
-          type: string
-        status:
-          type: integer
-          format: int32
-        detail:
-          type: string
-        instance:
-          type: string
-          format: uri
-        properties:
-          type: object
-          additionalProperties:
-            type: object
     CreateCustomerDto:
       type: object
       properties:

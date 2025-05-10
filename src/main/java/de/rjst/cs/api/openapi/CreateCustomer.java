@@ -6,6 +6,8 @@ import de.rjst.cs.api.openapi.model.CreateCustomerDto;
 import de.rjst.cs.api.openapi.model.CustomerDto;
 import de.rjst.cs.api.openapi.model.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.extensions.Extension;
+import io.swagger.v3.oas.annotations.extensions.ExtensionProperty;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,7 +18,34 @@ public interface CreateCustomer {
 
     @Operation(
         summary = "Creates a new customer",
-        description = "Creates a new customer in the system"
+        description = "Creates a new customer in the system",
+        extensions = @Extension(
+            name = "x-microcks-operation",
+            properties = {
+                @ExtensionProperty(name = "delay", value = "25"),
+                @ExtensionProperty(name = "dispatcher", value = "SCRIPT"),
+                @ExtensionProperty(
+                    name = "dispatcherRules",
+                    value = """
+                        def customer = new groovy.json.JsonSlurper().parseText(mockRequest.requestContent);
+                        
+                        if (customer.firstName == null || customer.firstName.trim() == "") {
+                          return "customer_created_invalid_firstname";
+                        }
+                        
+                        if (customer.lastName == null || customer.lastName.trim() == "") {
+                          return "customer_created_invalid_lastname";
+                        }
+                        
+                        if (customer.birthDate == null || customer.birthDate.trim() == "")) {
+                            return "customer_created_invalid_birthDate";
+                        }
+                        
+                        return "customer_created";
+                        """
+                )
+            }
+        )
     )
     @RequestBody(
         description = "The data of the customer to be created",
