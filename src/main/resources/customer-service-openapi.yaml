@@ -53,46 +53,46 @@ paths:
             schema:
               $ref: "#/components/schemas/CustomerDto"
             examples:
-              customer_updated:
-                description: customer_updated
+              updateCustomer:
+                description: updateCustomer
                 value:
                   id: 1
                   firstName: string
                   lastName: string
                   birthDate: 2025-04-05
                   email: string
-              customer_updated_notFound:
-                description: customer_updated_notFound
+              customerNotFound:
+                description: customerNotFound
                 value:
                   id: 999999999
                   firstName: string
                   lastName: string
                   birthDate: 2025-04-05
                   email: string
-              customer_updated_invalid_firstName:
-                description: customer_updated_invalid_firstName
+              invalidFirstName:
+                description: invalidFirstName
                 value:
                   id: 1
                   firstName: ""
-                  lastName: string
+                  lastName: Mustermann
                   birthDate: 2025-04-05
-                  email: string
-              customer_updated_invalid_lastName:
-                description: customer_updated_invalid_lastName
+                  email: null
+              invalidLastName:
+                description: invalidLastName
                 value:
                   id: 1
                   firstName: string
                   lastName: ""
                   birthDate: 2025-04-05
-                  email: string
-              customer_updated_invalid_birthDate:
-                description: customer_updated_invalid_birthDate
+                  email: null
+              invalidBirthDate:
+                description: invalidBirthDate
                 value:
                   id: 1
                   firstName: string
                   lastName: string
                   birthDate: ""
-                  email: string
+                  email: null
         required: true
       responses:
         "200":
@@ -102,8 +102,8 @@ paths:
               schema:
                 $ref: "#/components/schemas/CustomerDto"
               examples:
-                customer_updated:
-                  description: customer_updated
+                updateCustomer:
+                  description: updateCustomer
                   value: |
                     {
                       "id": {{ request.body/id }},
@@ -119,53 +119,52 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
               examples:
-                customer_updated_invalid_firstName:
-                  description: Customer firstname is invalid
+                invalidFirstName:
+                  description: invalidFirstName
                   value:
                     message: Validierungsfehler
                     errors:
-                      firstName: Vorname darf nicht leer sein
-                customer_updated_invalid_lastName:
-                  description: Customer lastname is invalid
+                      firstName: firstName darf nicht leer sein
+                invalidLastName:
+                  description: invalidLastName
                   value:
                     message: Validierungsfehler
                     errors:
-                      lastName: Nachname darf nicht leer sein
-                customer_updated_invalid_birthDate:
-                  description: Customer birthDate is invalid
+                      lastName: lastName darf nicht leer sein
+                invalidBirthDate:
+                  description: invalidBirthDate
                   value:
                     message: Validierungsfehler
                     errors:
-                      birthDate: Geburtsdatum ist ungültig
+                      virthdate: Birthdate darf nicht leer sein
         "404":
           description: Customer not found
           content:
             application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
               examples:
-                customer_updated_notFound:
-                  description: Customer not found
+                customerNotFound:
+                  description: customerNotFound
       x-microcks-operation:
         delay: "25"
         dispatcherRules: |
+          def result = "updateCustomer";
+
           def customer = new groovy.json.JsonSlurper().parseText(mockRequest.requestContent);
-
-          if (customer.id == null || customer.id == 999999999) {
-              return "customer_updated_notFound";
-          }
-
           if (customer.firstName == null || customer.firstName.trim() == "") {
-            return "customer_updated_invalid_firstName";
+            result = "invalidFirstName";
           }
 
           if (customer.lastName == null || customer.lastName.trim() == "") {
-            return "customer_updated_invalid_lastName";
+            result = "invalidLastName";
           }
 
           if (customer.birthDate == null || customer.birthDate.trim() == "") {
-              return "customer_updated_invalid_birthDate";
+            result = "invalidBirthDate";
           }
 
-          return "customer_updated";
+          return result;
         dispatcher: SCRIPT
     post:
       tags:
@@ -180,33 +179,33 @@ paths:
             schema:
               $ref: "#/components/schemas/CreateCustomerDto"
             examples:
-              customer_created:
-                description: customer_created
+              createCustomer:
+                description: createCustomer
                 value:
                   firstName: Max
                   lastName: Mustermann
                   birthDate: 2025-04-05
                   email: max.mustermann@web.de
-              customer_created_invalid_firstName:
-                description: customer_created_invalid_firstName
+              invalidFirstName:
+                description: invalidFirstName
                 value:
                   firstName: ""
                   lastName: Mustermann
                   birthDate: 2025-04-05
                   email: null
-              customer_created_invalid_lastName:
-                description: customer_created_invalid_lastName
+              invalidLastName:
+                description: invalidLastName
                 value:
                   firstName: string
                   lastName: ""
                   birthDate: 2025-04-05
                   email: null
-              customer_created_invalid_birthDate:
-                description: customer_created_invalid_birthDate
+              invalidBirthDate:
+                description: invalidBirthDate
                 value:
                   firstName: string
-                  lastName: ""
-                  birthDate: 2025-04-05
+                  lastName: string
+                  birthDate: ""
                   email: null
         required: true
       responses:
@@ -217,8 +216,8 @@ paths:
               schema:
                 $ref: "#/components/schemas/CustomerDto"
               examples:
-                customer_created:
-                  description: customer_created
+                createCustomer:
+                  description: createCustomer
                   value:
                     id: 1
                     firstName: string
@@ -232,24 +231,24 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
               examples:
-                customer_created_invalid_firstName:
-                  description: Customer firstname is invalid
+                invalidFirstName:
+                  description: Firstname is invalid
                   value:
                     message: Validierungsfehler
                     errors:
-                      firstName: Vorname darf nicht leer sein
-                customer_created_invalid_lastName:
-                  description: Customer lastname is invalid
+                      firstName: firstName darf nicht leer sein
+                invalidLastName:
+                  description: Lastname is invalid
                   value:
                     message: Validierungsfehler
                     errors:
-                      lastName: Nachname darf nicht leer sein
-                customer_created_invalid_birthDate:
-                  description: Customer birthDate is invalid
+                      lastName: lastName darf nicht leer sein
+                invalidBirthDate:
+                  description: Birthdate is invalid
                   value:
                     message: Validierungsfehler
                     errors:
-                      birthDate: Geburtsdatum ist ungültig
+                      virthdate: Birthdate darf nicht leer sein
         "500":
           description: Internal Server Error
           content:
@@ -259,21 +258,22 @@ paths:
       x-microcks-operation:
         delay: "25"
         dispatcherRules: |
-          def customer = new groovy.json.JsonSlurper().parseText(mockRequest.requestContent);
+          def result = "createCustomer";
 
+          def customer = new groovy.json.JsonSlurper().parseText(mockRequest.requestContent);
           if (customer.firstName == null || customer.firstName.trim() == "") {
-            return "customer_created_invalid_firstname";
+            result = "invalidFirstName";
           }
 
           if (customer.lastName == null || customer.lastName.trim() == "") {
-            return "customer_created_invalid_lastname";
+            result = "invalidLastName";
           }
 
-          if (customer.birthDate == null || customer.birthDate.trim() == "")) {
-              return "customer_created_invalid_birthDate";
+          if (customer.birthDate == null || customer.birthDate.trim() == "") {
+            result = "invalidBirthDate";
           }
 
-          return "customer_created";
+          return result;
         dispatcher: SCRIPT
   /customers/{id}:
     get:
@@ -290,12 +290,12 @@ paths:
           type: integer
           format: int64
         examples:
-          customer_not_found:
-            description: customer_not_found
-            value: 9999999999
-          customer_found:
-            description: customer_found
+          getCustomerById:
+            description: getCustomerById
             value: 1
+          customerNotFound:
+            description: customerNotFound
+            value: 9999999999
       responses:
         "200":
           description: Customer found
@@ -304,8 +304,8 @@ paths:
               schema:
                 $ref: "#/components/schemas/CustomerDto"
               examples:
-                customer_found:
-                  description: customer_found
+                getCustomerById:
+                  description: getCustomerById
                   value:
                     id: 1
                     firstName: string
@@ -316,9 +316,11 @@ paths:
           description: Customer not found
           content:
             application/json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetail"
               examples:
-                customer_not_found:
-                  description: customer_not_found
+                customerNotFound:
+                  description: customerNotFound
         "500":
           description: Internal Server Error
           content:
@@ -340,11 +342,11 @@ paths:
           type: integer
           format: int64
         examples:
-          non_customer:
-            description: non_customer
+          customerAlreadyDeleted:
+            description: customerAlreadyDeleted
             value: 9999999999
-          customer_deleted:
-            description: customer_deleted
+          deleteCustomer:
+            description: deleteCustomer
             value: 1
       responses:
         "204":
@@ -352,10 +354,10 @@ paths:
           content:
             application/json:
               examples:
-                customer_deleted:
-                  description: customer_deleted
-                non_customer:
-                  description: non_customer
+                deleteCustomer:
+                  description: deleteCustomer
+                customerAlreadyDeleted:
+                  description: customerAlreadyDeleted
         "500":
           description: Internal Server Error
           content:
@@ -405,6 +407,26 @@ components:
       - firstName
       - id
       - lastName
+    ProblemDetail:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+        properties:
+          type: object
+          additionalProperties:
+            type: object
     CreateCustomerDto:
       type: object
       properties:

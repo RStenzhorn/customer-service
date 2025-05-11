@@ -3,8 +3,8 @@ package de.rjst.cs.datasource;
 import static io.restassured.RestAssured.given;
 
 import de.rjst.cs.api.CustomerEndpoints;
-import de.rjst.cs.api.openapi.model.CreateCustomerDto;
-import de.rjst.cs.api.openapi.model.CustomerDto;
+import de.rjst.cs.api.model.CreateCustomerDto;
+import de.rjst.cs.api.model.CustomerDto;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;

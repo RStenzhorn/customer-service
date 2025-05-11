@@ -2,13 +2,13 @@ package de.rjst.cs.api;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
-import de.rjst.cs.api.openapi.CreateCustomer;
-import de.rjst.cs.api.openapi.DeleteCustomer;
-import de.rjst.cs.api.openapi.GetCustomerById;
-import de.rjst.cs.api.openapi.GetCustomers;
-import de.rjst.cs.api.openapi.UpdateCustomer;
-import de.rjst.cs.api.openapi.model.CreateCustomerDto;
-import de.rjst.cs.api.openapi.model.CustomerDto;
+import de.rjst.cs.api.model.CreateCustomerDto;
+import de.rjst.cs.api.model.CustomerDto;
+import de.rjst.cs.api.openapi.create.CreateCustomer;
+import de.rjst.cs.api.openapi.delete.DeleteCustomer;
+import de.rjst.cs.api.openapi.get.all.GetCustomers;
+import de.rjst.cs.api.openapi.get.id.GetCustomerById;
+import de.rjst.cs.api.openapi.update.UpdateCustomer;
 import de.rjst.cs.logic.AllCustomerSupplier;
 import de.rjst.cs.logic.CreateCustomerFunction;
 import de.rjst.cs.logic.CustomerByIdFunction;

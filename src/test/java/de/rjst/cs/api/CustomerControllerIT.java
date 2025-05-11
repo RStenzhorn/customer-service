@@ -3,7 +3,7 @@ package de.rjst.cs.api;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import de.rjst.cs.TestcontainersConfiguration;
-import de.rjst.cs.api.openapi.model.CreateCustomerDto;
+import de.rjst.cs.api.model.CreateCustomerDto;
 import de.rjst.cs.datasource.CustomerControllerRestAssured;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;

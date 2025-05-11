@@ -1,4 +1,4 @@
-package de.rjst.cs.api.openapi.model;
+package de.rjst.cs.api.model;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

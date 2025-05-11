@@ -1,6 +1,6 @@
 package de.rjst.cs.logic.mapper;
 
-import de.rjst.cs.api.openapi.model.CustomerDto;
+import de.rjst.cs.api.model.CustomerDto;
 import de.rjst.cs.database.CustomerEntity;
 import java.util.function.Function;
 import org.springframework.stereotype.Service;

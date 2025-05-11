@@ -1,6 +1,6 @@
 package de.rjst.cs.logic;
 
-import de.rjst.cs.api.openapi.model.ErrorResponse;
+import de.rjst.cs.api.model.ErrorResponse;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.http.HttpStatus;

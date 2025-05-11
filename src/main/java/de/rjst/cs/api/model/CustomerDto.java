@@ -1,4 +1,4 @@
-package de.rjst.cs.api.openapi.model;
+package de.rjst.cs.api.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;

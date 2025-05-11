@@ -66,3 +66,4 @@ public class CustomerServiceContractIT {
         assertEquals(5, testResult.getTestCaseResults().size());
     }
 }
+
