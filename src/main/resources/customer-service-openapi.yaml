@@ -117,7 +117,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
+                $ref: "#/components/schemas/ValidationErrorResponse"
               examples:
                 invalidFirstName:
                   description: invalidFirstName
@@ -142,16 +142,26 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
+                $ref: "#/components/schemas/DefaultErrorResponse"
               examples:
                 customerNotFound:
                   description: customerNotFound
+                  value:
+                    timestamp: 2025-05-12T19:40:47.682+00:00
+                    status: 404
+                    error: Not Found
+                    message: Customer not found
+                    path: /customers/9999999999
       x-microcks-operation:
         delay: "25"
         dispatcherRules: |
           def result = "updateCustomer";
 
           def customer = new groovy.json.JsonSlurper().parseText(mockRequest.requestContent);
+          if (customer.id == null || customer.id == 999999999) {
+            result = "customerNotFound";
+          }
+
           if (customer.firstName == null || customer.firstName.trim() == "") {
             result = "invalidFirstName";
           }
@@ -229,7 +239,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ErrorResponse"
+                $ref: "#/components/schemas/ValidationErrorResponse"
               examples:
                 invalidFirstName:
                   description: Firstname is invalid
@@ -317,10 +327,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ProblemDetail"
+                $ref: "#/components/schemas/DefaultErrorResponse"
               examples:
                 customerNotFound:
                   description: customerNotFound
+                  value:
+                    timestamp: 2025-05-12T19:40:47.682+00:00
+                    status: 404
+                    error: Not Found
+                    message: Customer not found
+                    path: /customers/9999999999
         "500":
           description: Internal Server Error
           content:
@@ -366,7 +382,7 @@ paths:
                 type: object
 components:
   schemas:
-    ErrorResponse:
+    ValidationErrorResponse:
       type: object
       properties:
         message:
@@ -407,26 +423,32 @@ components:
       - firstName
       - id
       - lastName
-    ProblemDetail:
+    DefaultErrorResponse:
       type: object
       properties:
-        type:
+        timestamp:
           type: string
-          format: uri
-        title:
-          type: string
+          format: date-time
+          description: Timestamp of the error
         status:
           type: integer
           format: int32
-        detail:
+          description: HttpStatusCode
+        error:
           type: string
-        instance:
+          description: HttpText
+        message:
           type: string
-          format: uri
-        properties:
-          type: object
-          additionalProperties:
-            type: object
+          description: Reason for ErrorCode
+        path:
+          type: string
+          description: Path
+      required:
+        - error
+        - message
+        - path
+        - status
+        - timestamp
     CreateCustomerDto:
       type: object
       properties:

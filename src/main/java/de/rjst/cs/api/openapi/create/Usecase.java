@@ -11,6 +11,4 @@ class Usecase {
     public final String INVALID_LAST_NAME = "invalidLastName";
     public final String INVALID_BIRTH_DATE = "invalidBirthDate";
 
-    public final String CUSTOMER_NOT_FOUND = "customerNotFound";
-
 }

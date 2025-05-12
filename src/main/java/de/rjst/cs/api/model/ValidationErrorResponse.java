@@ -8,7 +8,7 @@ import lombok.Data;
 
 @AllArgsConstructor
 @Data
-public class ErrorResponse {
+public class ValidationErrorResponse {
 
     @Schema(description = "Error message", requiredMode = RequiredMode.REQUIRED)
     private String message;

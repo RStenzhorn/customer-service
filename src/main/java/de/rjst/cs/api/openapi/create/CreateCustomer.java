@@ -4,7 +4,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import de.rjst.cs.api.model.CreateCustomerDto;
 import de.rjst.cs.api.model.CustomerDto;
-import de.rjst.cs.api.model.ErrorResponse;
+import de.rjst.cs.api.model.ValidationErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.extensions.Extension;
 import io.swagger.v3.oas.annotations.extensions.ExtensionProperty;
@@ -89,7 +89,7 @@ public interface CreateCustomer {
     @ApiResponse(
         responseCode = "400",
         description = "Invalid input data",
-        content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class), examples =
+        content = @Content(mediaType = APPLICATION_JSON_VALUE, schema = @Schema(implementation = ValidationErrorResponse.class), examples =
             {
                 @ExampleObject(
                     name = Usecase.INVALID_FIRST_NAME,

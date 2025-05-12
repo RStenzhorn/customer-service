@@ -3,7 +3,8 @@ package de.rjst.cs.api.openapi.update;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import de.rjst.cs.api.model.CustomerDto;
-import de.rjst.cs.api.model.ErrorResponse;
+import de.rjst.cs.api.model.DefaultErrorResponse;
+import de.rjst.cs.api.model.ValidationErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.extensions.Extension;
 import io.swagger.v3.oas.annotations.extensions.ExtensionProperty;
@@ -12,7 +13,6 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import org.springframework.http.ProblemDetail;
 
 public interface UpdateCustomer {
 
@@ -30,6 +30,10 @@ public interface UpdateCustomer {
                         def result = "updateCustomer";
                         
                         def customer = new groovy.json.JsonSlurper().parseText(mockRequest.requestContent);
+                        if (customer.id == null || customer.id == 999999999) {
+                          result = "customerNotFound";
+                        }
+                        
                         if (customer.firstName == null || customer.firstName.trim() == "") {
                           result = "invalidFirstName";
                         }
@@ -87,7 +91,7 @@ public interface UpdateCustomer {
         description = "Invalid input data",
         content = @Content(
             mediaType = APPLICATION_JSON_VALUE,
-            schema = @Schema(implementation = ErrorResponse.class),
+            schema = @Schema(implementation = ValidationErrorResponse.class),
             examples = {
                 @ExampleObject(
                     name = Usecase.INVALID_FIRST_NAME,
@@ -109,8 +113,11 @@ public interface UpdateCustomer {
         description = "Customer not found",
         content = @Content(
             mediaType = APPLICATION_JSON_VALUE,
-            schema = @Schema(implementation = ProblemDetail.class),
-            examples = @ExampleObject(name = Usecase.CUSTOMER_NOT_FOUND)
+            schema = @Schema(implementation = DefaultErrorResponse.class),
+            examples = @ExampleObject(
+                name = Usecase.CUSTOMER_NOT_FOUND,
+                value = Response.CUSTOMER_NOT_FOUND
+            )
         )
     )
     CustomerDto updateCustomer(CustomerDto customerDto);

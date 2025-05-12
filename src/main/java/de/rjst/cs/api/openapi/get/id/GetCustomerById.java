@@ -3,13 +3,13 @@ package de.rjst.cs.api.openapi.get.id;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import de.rjst.cs.api.model.CustomerDto;
+import de.rjst.cs.api.model.DefaultErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import org.springframework.http.ProblemDetail;
 
 public interface GetCustomerById {
 
@@ -47,8 +47,11 @@ public interface GetCustomerById {
         description = "Customer not found",
         content = @Content(
             mediaType = APPLICATION_JSON_VALUE,
-            schema = @Schema(implementation = ProblemDetail.class),
-            examples = @ExampleObject(name = Usecase.CUSTOMER_NOT_FOUND)
+            schema = @Schema(implementation = DefaultErrorResponse.class),
+            examples = @ExampleObject(
+                name = Usecase.CUSTOMER_NOT_FOUND,
+                value = Response.CUSTOMER_NOT_FOUND
+            )
         )
     )
     @ApiResponse(responseCode = "500", description = "Internal Server Error")
